@@ -129,3 +129,11 @@ alter table messages       enable row level security;
 alter table lead_events    enable row level security;
 alter table webhook_events enable row level security;
 alter table owner_alerts   enable row level security;
+
+-- Failed dashboard logins (simple brute-force protection).
+create table if not exists auth_failures (
+  at  timestamptz not null default now(),
+  ip  text not null
+);
+create index if not exists auth_failures_ip_idx on auth_failures (ip, at);
+alter table auth_failures enable row level security;

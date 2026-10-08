@@ -7,6 +7,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node --test --test-concurrency=1 test/*.test.js",
+    "demo": "node scripts/demo.js",
     "db:schema": "node scripts/apply-schema.js"
   },
   "dependencies": {

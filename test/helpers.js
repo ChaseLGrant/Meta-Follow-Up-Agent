@@ -17,7 +17,7 @@ async function freshDb() {
     shared = new PGlite();
     await shared.exec(schema);
   }
-  await shared.exec('truncate leads, messages, lead_events, webhook_events, owner_alerts restart identity cascade');
+  await shared.exec('truncate leads, messages, lead_events, webhook_events, owner_alerts, auth_failures restart identity cascade');
   return shared;
 }
 
