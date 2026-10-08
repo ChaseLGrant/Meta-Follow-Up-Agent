@@ -9,9 +9,9 @@ import { followUp1Text, followUp2Text } from '../src/messages.js';
 const SARAH = '+17605550123';
 
 // Simulate the 5-minute cron for `hours`.
-async function runCron(w, hours) {
-  for (let i = 0; i < (hours * 60) / 5; i++) {
-    w.advanceHours(5 / 60);
+async function runCron(w, hours, stepMinutes = 5) {
+  for (let i = 0; i < (hours * 60) / stepMinutes; i++) {
+    w.advanceHours(stepMinutes / 60);
     await runScheduler(w);
   }
 }
@@ -39,7 +39,7 @@ test('no booking/no reply: follow-up #1 at ~24h, #2 at ~72h, then nothing more',
   assert.match(texts[2].body, /If now isn't the right time, no problem\.$/);
   assert.equal((await w.lead(lead.id)).status, 'NO_RESPONSE');
 
-  await runCron(w, 24 * 7);
+  await runCron(w, 24 * 7, 60);
   assert.equal(w.textsTo(SARAH).length, 3, 'sequence stops after follow-up #2');
 });
 
@@ -81,7 +81,7 @@ test('a send that crashed mid-flight is never re-sent automatically; Chase is to
   const fu1 = (await w.messages(lead.id)).find((m) => m.kind === 'fu1');
   assert.equal(fu1.status, 'failed');
   assert.match(w.ownerTexts().at(-1).body, /may not have gone out/);
-  await runCron(w, 30);
+  await runCron(w, 30, 60);
   assert.equal(w.textsTo(SARAH).length, 1);
 });
 

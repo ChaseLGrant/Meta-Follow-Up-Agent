@@ -10,9 +10,19 @@ export const CHASE = '+17605550100';
 export const BASE = 'https://follow-up.example.com';
 
 // A full test world: in-memory Postgres, fake Twilio, fake email, controllable clock.
+// One in-memory Postgres per test file (booting one takes seconds); emptied before each test.
+let shared;
+async function freshDb() {
+  if (!shared) {
+    shared = new PGlite();
+    await shared.exec(schema);
+  }
+  await shared.exec('truncate leads, messages, lead_events, webhook_events, owner_alerts restart identity cascade');
+  return shared;
+}
+
 export async function makeWorld(envOverrides = {}) {
-  const pg = new PGlite();
-  await pg.exec(schema);
+  const pg = await freshDb();
   const config = loadConfig({
     PUBLIC_BASE_URL: BASE,
     SMS_MODE: 'live',
@@ -109,5 +119,22 @@ export function calendlyRequest(world, body, key = 'calendly-secret') {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Calendly-Webhook-Signature': `t=${t},v1=${calendlySignature(raw, key, t)}` },
     body: raw,
+  });
+}
+
+import { twilioSignature } from '../src/security.js';
+
+let twilioInboundCounter = 0;
+export function twilioRequest(path, params, token = 'twilio-secret') {
+  const sig = twilioSignature(`${BASE}${path}`, params, token);
+  return new Request(`${BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Twilio-Signature': sig },
+    body: new URLSearchParams(params).toString(),
+  });
+}
+export function inboundSms(from, body, extra = {}) {
+  return twilioRequest('/hooks/twilio/inbound', {
+    MessageSid: `SMin${++twilioInboundCounter}`, From: from, To: '+17605550000', Body: body, ...extra,
   });
 }
