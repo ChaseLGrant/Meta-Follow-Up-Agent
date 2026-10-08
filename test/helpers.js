@@ -92,3 +92,22 @@ export function netlifyRequest(payload, secret = 'netlify-secret') {
     body: raw,
   });
 }
+
+import { calendlySignature } from '../src/security.js';
+
+let inviteeCounter = 0;
+export function calendlyEvent(event, payload, createdAt = new Date().toISOString()) {
+  return { event, created_at: createdAt, payload };
+}
+export function newInviteeUri() {
+  return `https://api.calendly.com/scheduled_events/EV${++inviteeCounter}/invitees/INV${inviteeCounter}`;
+}
+export function calendlyRequest(world, body, key = 'calendly-secret') {
+  const raw = JSON.stringify(body);
+  const t = Math.floor(world.now().getTime() / 1000);
+  return new Request(`${BASE}/hooks/calendly`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Calendly-Webhook-Signature': `t=${t},v1=${calendlySignature(raw, key, t)}` },
+    body: raw,
+  });
+}
