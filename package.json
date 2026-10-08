@@ -1,0 +1,18 @@
+{
+  "name": "athlete-market-follow-up",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Athlete Market — automated SMS follow-up: new lead → text → booking link → follow-ups → notify Chase.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 test/*.test.js",
+    "db:schema": "node scripts/apply-schema.js"
+  },
+  "dependencies": {
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
+  }
+}

@@ -1,0 +1,16 @@
+# The Athlete Market — follow-up agent (a SEPARATE Netlify site from the landing page).
+# No build step: Netlify bundles the functions in netlify/functions.
+
+[build]
+  publish = "public"
+  command = ""
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"

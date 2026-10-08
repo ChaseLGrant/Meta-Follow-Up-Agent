@@ -1,0 +1,87 @@
+diff --git a/landing/index.html b/landing/index.html
+index 365301a..b4e3f15 100644
+--- a/landing/index.html
++++ b/landing/index.html
+@@ -325,6 +325,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
+ .bad .opts{outline:2px solid rgba(208,52,44,.4);outline-offset:8px;border-radius:14px}
+ 
+ .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
++.consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px !important;font-weight:500 !important;line-height:1.45;color:var(--muted-2) !important;cursor:pointer}
++.consent input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ink)}
++.consent a{color:inherit;text-decoration:underline}
+ .submit-err{display:none;margin-top:18px;padding:14px 16px;border-radius:12px;
+   background:#FEF2F2;border:1px solid #FCA5A5;color:#B42318;font-size:14.5px;font-weight:600}
+ .submit-err a{color:#B42318;font-weight:800}
+@@ -391,6 +394,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
+   <input type="text" name="parent_first"><input type="text" name="parent_last">
+   <input type="email" name="email"><input type="tel" name="phone">
+   <input type="text" name="best_time"><textarea name="notes"></textarea>
++  <input type="text" name="sms_consent"><input type="text" name="sms_consent_version">
+   <input type="text" name="outcome"><input type="text" name="source">
+   <input type="text" name="submitted_at"><input type="text" name="seconds_to_complete">
+   <input type="text" name="utm_source"><input type="text" name="utm_medium"><input type="text" name="utm_campaign">
+@@ -854,6 +858,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
+               </select><span class="err">Required</span></div>
+             <div class="field full"><label for="notes">Anything else we should know? <span>(optional)</span></label>
+               <textarea id="notes" name="notes" placeholder="Recent results, injuries, academic honors, schools already on your list&hellip;"></textarea></div>
++            <div class="field full">
++              <label class="consent"><input type="checkbox" id="smsConsent" name="sms_consent" value="yes">
++                <span>By checking this box, I agree to receive text messages from The Athlete Market about my recruiting application, including scheduling and follow-up messages, at the phone number provided. Consent is not a condition of purchase. Up to 4 msgs per inquiry. Msg &amp; data rates may apply. Reply HELP for help, STOP to opt out. <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a> &middot; <a href="/terms.html" target="_blank" rel="noopener">Terms</a></span>
++              </label>
++              <input type="hidden" name="sms_consent_version" value="v1">
++            </div>
+           </div>
+           <div class="hp" aria-hidden="true"><label for="company">Company</label>
+             <input id="company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
+diff --git a/landing/privacy.html b/landing/privacy.html
+new file mode 100644
+index 0000000..50bcd48
+--- /dev/null
++++ b/landing/privacy.html
+@@ -0,0 +1,22 @@
++<!doctype html>
++<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
++<title>Privacy Policy — The Athlete Market</title>
++<style>body{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#101828;background:#fff;max-width:720px;margin:0 auto;padding:32px 16px}h1{font-size:28px}h2{font-size:19px;margin-top:28px}a{color:inherit}</style>
++</head><body>
++<h1>Privacy Policy</h1>
++<p>Last updated: [DATE]</p>
++<p>The Athlete Market ("we," "us") provides college recruiting consulting to families of high school athletes. This policy explains what we collect and how we use it.</p>
++<h2>What we collect</h2>
++<p>When you submit our application, we collect the parent's name, email, and phone number; the athlete's name, sport, graduation year, school, location, academic and athletic details you provide; and basic technical data (such as IP address, browser, and the ad or link that brought you to our site).</p>
++<h2>How we use it</h2>
++<p>We use your information to review your application, contact you about it (by phone, email, or text message if you opted in), schedule consultations, and improve our advertising and website.</p>
++<h2>Text messaging</h2>
++<p>If you check the SMS consent box, we will text you about your recruiting application, including scheduling and follow-up messages. Message frequency varies (up to 4 messages per inquiry). Message and data rates may apply. Reply STOP to opt out at any time, or HELP for help.</p>
++<p><strong>No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Text messaging originator opt-in data and consent will not be shared with any third parties.</strong> We share information only with service providers that help us operate (for example, our texting, scheduling, and hosting providers) and only to provide our service to you.</p>
++<h2>We never sell your information</h2>
++<p>We do not sell or rent your personal information.</p>
++<h2>Your choices</h2>
++<p>You can ask us to access, correct, or delete your information, or stop contacting you, by emailing [CONTACT EMAIL].</p>
++<h2>Contact</h2>
++<p>The Athlete Market · [CONTACT EMAIL] · [BUSINESS ADDRESS]</p>
++</body></html>
+diff --git a/landing/terms.html b/landing/terms.html
+new file mode 100644
+index 0000000..750242f
+--- /dev/null
++++ b/landing/terms.html
+@@ -0,0 +1,18 @@
++<!doctype html>
++<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
++<title>Terms — The Athlete Market</title>
++<style>body{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#101828;background:#fff;max-width:720px;margin:0 auto;padding:32px 16px}h1{font-size:28px}h2{font-size:19px;margin-top:28px}a{color:inherit}</style>
++</head><body>
++<h1>Terms</h1>
++<p>Last updated: [DATE]</p>
++<h2>SMS program terms</h2>
++<p><strong>Program:</strong> The Athlete Market recruiting application updates. When you opt in on our application form, Chase from The Athlete Market will text you about your application, including a link to schedule a call and follow-up messages.</p>
++<p><strong>Frequency:</strong> Message frequency varies; up to 4 messages per inquiry.</p>
++<p><strong>Cost:</strong> Message and data rates may apply.</p>
++<p><strong>Opt out:</strong> Reply STOP at any time to stop receiving texts. You will receive one confirmation message and no further texts.</p>
++<p><strong>Help:</strong> Reply HELP for help, or email [CONTACT EMAIL].</p>
++<p>Consent to receive text messages is not a condition of purchase. Carriers are not liable for delayed or undelivered messages.</p>
++<p>See our <a href="/privacy.html">Privacy Policy</a>.</p>
++<h2>Our services</h2>
++<p>The Athlete Market provides recruiting guidance and consulting. We do not guarantee scholarships, roster spots, admission, or any specific recruiting outcome.</p>
++</body></html>
